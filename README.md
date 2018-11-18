@@ -25,4 +25,5 @@ In notebook folder files `pyspark.ipnb` and `toree.ipynb` run example notebooks 
   * https://grzegorzgajda.gitbooks.io/spark-examples/content/basics/docker.html
   * https://github.com/gettyimages/docker-spark
   * http://alexanderwaldin.github.io/pyspark-quickstart-guide.html
+  * https://stackoverflow.com/questions/39986507/spark-standalone-configuration-having-multiple-executors - configuring notebook to take less resources within cluster
 
