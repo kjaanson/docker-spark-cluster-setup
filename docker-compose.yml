@@ -13,8 +13,11 @@ services:
       - spark-master
   
   spark-master:
+    image: spark-base
+    build:
+      context: .
+      dockerfile: all-spark-notebook.Dockerfile
     hostname: spark-master
-    image: jupyter/all-spark-notebook
     command: /usr/local/spark/bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
     environment:
       MASTER: spark://spark-master:7077
@@ -39,7 +42,7 @@ services:
       - ./data:/tmp/data
 
   spark-worker-1:
-    image: jupyter/all-spark-notebook
+    image: spark-base
     command: /usr/local/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     hostname: spark-worker-1
     environment: 
@@ -64,10 +67,10 @@ services:
     volumes:
       - ./conf/spark-worker:/conf
       - ./data:/tmp/data
-      - ./work1:/work
+#      - ./work1:/work
 
   spark-worker-2:
-    image: jupyter/all-spark-notebook
+    image: spark-base
     command: /usr/local/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     hostname: spark-worker-2
     environment: 
@@ -92,4 +95,4 @@ services:
     volumes:
       - ./conf/spark-worker:/conf
       - ./data:/tmp/data
-      - ./work2:/work
+#      - ./work2:/work
