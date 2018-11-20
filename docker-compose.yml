@@ -63,11 +63,10 @@ services:
       - 7016
       - 8881
     ports:
-      - 8081:8081
+      - "8081:8081"
     volumes:
       - ./conf/spark-worker:/conf
       - ./data:/tmp/data
-#      - ./work1:/work
 
   spark-worker-2:
     image: spark-base
@@ -79,7 +78,7 @@ services:
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 2g
       SPARK_WORKER_PORT: 8881
-      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_WORKER_WEBUI_PORT: 8082
       SPARK_WORKER_DIR: /work
     links:
       - spark-master
@@ -91,8 +90,61 @@ services:
       - 7016
       - 8881
     ports:
-      - 8082:8082
+      - "8082:8082"
     volumes:
       - ./conf/spark-worker:/conf
       - ./data:/tmp/data
-#      - ./work2:/work
+
+  spark-worker-3:
+    image: spark-base
+    command: /usr/local/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    hostname: spark-worker-3
+    environment: 
+      SPARK_CONF_DIR: /conf
+      SPARK_PUBLIC_DNS: 127.0.0.1
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 2g
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8083
+      SPARK_WORKER_DIR: /work
+    links:
+      - spark-master
+    expose:
+      - 7012
+      - 7013
+      - 7014
+      - 7015
+      - 7016
+      - 8881
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./conf/spark-worker:/conf
+      - ./data:/tmp/data
+
+  spark-worker-4:
+    image: spark-base
+    command: /usr/local/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    hostname: spark-worker-4
+    environment: 
+      SPARK_CONF_DIR: /conf
+      SPARK_PUBLIC_DNS: 127.0.0.1
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 2g
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8084
+      SPARK_WORKER_DIR: /work
+    links:
+      - spark-master
+    expose:
+      - 7012
+      - 7013
+      - 7014
+      - 7015
+      - 7016
+      - 8881
+    ports:
+      - "8084:8084"
+    volumes:
+      - ./conf/spark-worker:/conf
+      - ./data:/tmp/data
