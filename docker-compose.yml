@@ -16,7 +16,7 @@ services:
     image: spark-base
     build:
       context: .
-      dockerfile: all-spark-notebook.Dockerfile
+      dockerfile: spark-base.Dockerfile
     hostname: spark-master
     command: /usr/local/spark/bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
     environment:
