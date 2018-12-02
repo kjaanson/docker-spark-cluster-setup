@@ -5,18 +5,27 @@ Runs docker master together with two workers.
 Jupyter notebook runs on http://localhost:8888/
 Spark master WebUI is accessible on http://localhost:8080/
 
-To start cluster run: `docker-compose up`
+To start cluster run: 
 
-In notebook folder files `pyspark.ipnb` and `toree.ipynb` run example notebooks on the cluster.
+`docker-compose up` for cluster with single worker
+
+or
+
+`docker-compose up --scale spark-worker=4` for cluster with 4 workers
+
+
+In `notebooks` folder files `pyspark.ipnb` and `toree.ipynb` run example notebooks on the cluster.
 
 
 # Problems encountered
   * At first spark workers were not able to create worker dir within their containers. Changed worker dir location with SPARK_WORKER_DIR env variable to volume mounted directory. This should be fixed within containers by creating correct directory beforehand.
-  * There were some wierd bugs due to volume mounting of `/work` dir in workers, possibly due to the write access being wrong. Fixed by creating wirs by hand first. This should also be fixes when docker image has the dir created first
 
 # ToDo Next
-  * Create Dockerfile to create Spark master/worker from all-spark-notebook datascience docker stack image
   * Create Dockerfile for lean and clean Spark master/worker
+  * Add history server to the stack
+  * Add connectors for SQL server and Cassandra to Docker image
+  * Add config for running in multihost Docker Swarm
+  * Add config for running in Kubernetes cluster
 
 # References
   * https://jupyter-docker-stacks.readthedocs.io/en/latest/using/specifics.html
