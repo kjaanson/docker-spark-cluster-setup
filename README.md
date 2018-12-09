@@ -16,6 +16,31 @@ or
 
 In `notebooks` folder files `pyspark.ipnb` and `toree.ipynb` run example notebooks on the cluster.
 
+# Cassandra connection
+
+Addad cassandra as a separate container. To connect to cql shell run:
+```
+docker exec -it docker-spark-setup_db-cassandra_1 cqlsh
+```
+
+Copy paste the test data to the shell (in file `conf/cassandra/testing_keyspace.cql`, TODO - Think how to automate this):
+```
+CREATE KEYSPACE test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };
+CREATE TABLE test.kv(key text PRIMARY KEY, value int);
+INSERT INTO test.kv(key, value) VALUES ('key1', 1);
+INSERT INTO test.kv(key, value) VALUES ('key2', 2);
+```
+
+# Adding default jars to notebook and shell
+
+Added jar and config from docker-compose.
+
+Running shell with configs specified in `docker-compose.yaml`:
+```
+/usr/local/spark/bin/spark-shell $SPARK_OPTS
+```
+
+Running Toree notebook with cassandra connector: look at `notebooks/toree-cassandra-test.ipynb`. Will load jars/config from `$SPARK_OPTS`.
 
 # Problems encountered
   * At first spark workers were not able to create worker dir within their containers. Changed worker dir location with SPARK_WORKER_DIR env variable to volume mounted directory. This should be fixed within containers by creating correct directory beforehand.

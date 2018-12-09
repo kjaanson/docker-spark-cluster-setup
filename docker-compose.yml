@@ -1,17 +1,25 @@
 version: '3'
 services:
   jupyter:
-    image: jupyter/all-spark-notebook
+    image: jupyter-notebook
+    build:
+      context: .
+      dockerfile: jupyter-notebook.Dockerfile
     ports:
       - "8888:8888"
     volumes:
       - ./notebooks:/home/jovyan
     environment:
       - MASTER=spark://spark-master:7077
+      - SPARK_OPTS=--jars /spark-cassandra-connector-assembly-2.3.2-15-g60b513ac.jar --conf spark.cassandra.connection.host=db-cassandra
       - GRANT_SUDO=yes
     links:
       - spark-master
+      - db-cassandra
   
+  db-cassandra:
+    image: cassandra
+
   spark-master:
     image: spark-base
     build:
@@ -23,6 +31,8 @@ services:
       MASTER: spark://spark-master:7077
       SPARK_CONF_DIR: /conf
       SPARK_PUBLIC_DNS: 127.0.0.1
+    links:
+      - db-cassandra
     expose:
       - 7001
       - 7002
@@ -55,6 +65,7 @@ services:
       SPARK_WORKER_DIR: /work
     links:
       - spark-master
+      - db-cassandra
     expose:
       - 7012
       - 7013
@@ -66,3 +77,5 @@ services:
     volumes:
       - ./conf/spark-worker:/conf
       - ./data:/tmp/data
+
+  
